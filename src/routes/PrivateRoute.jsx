@@ -1,60 +1,69 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { authContext } from "../globalProviders/AuthContext"
 // import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 // import SweetAlert from "react-bootstrap-sweetalert";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 
 
 
 export default function PrivateRoute({ children }) {
     const { currentUser } = useContext(authContext);
-    const location = useLocation();
+    const location = useLocation()
+
 
     if (currentUser !== null) {
         return children;
     }
     return (
+        <>
+            {/* <Navigate to="/user-login" state={location.pathname}></Navigate> */}
+            <ExampleComponent></ExampleComponent>
 
-
-        <Navigate to="/user-login" state={location.pathname}></Navigate>
+        </>
 
     );
 }
-// const ExampleComponent = () => {
-//     // const [showAlert, setShowAlert] = useState(false)
+const ExampleComponent = () => {
+    const location = useLocation();
+    // const [showAlert, setShowAlert] = useState(false)
+    const [isShow, setIsShow] = useState(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+        setTimeout(() => {
+            navigate("/user-login", { state: location.pathname })
+        }, 3000)
+    }, [])
 
-//     const [isShow, setIsShow] = useState(true);
+    // const handleConfirm = () => {
+    //     // Redirect to another page
+    //     window.location.href = "/user-login";
+    //     console.log(location);
+    // };
+    return (
+        <div>
 
+            <SweetAlert
+                show={isShow}
+                title="Please login first"
+                showCloseButton
+                // onConfirm={handleConfirm}
+                onCancel={() => {
+                    console.log('cancel');
+                    setIsShow(false);
+                }}
+                onEscapeKey={() => setIsShow(false)}
+                onOutsideClick={() => setIsShow(false)}
 
-//     const handleConfirm = () => {
-//         // Redirect to another page
-//         window.location.href = "/user-login";
-//         console.log(location);
-//     };
-//     return (
-//         <div>
+            >
+                You may need to login to proceed.
 
-//             <SweetAlert
-//                 show={isShow}
-//                 title="Please login first"
-//                 showCloseButton
-//                 onConfirm={handleConfirm}
-//                 onCancel={() => {
-//                     console.log('cancel');
-//                     setIsShow(false);
-//                 }}
-//                 onEscapeKey={() => setIsShow(false)}
-//                 onOutsideClick={() => setIsShow(false)}
-
-//             >
-//                 You may need to login to proceed.
-
-//             </SweetAlert>
-//         </div>
-//     );
-// };
+            </SweetAlert>
+        </div>
+    );
+};
 PrivateRoute.propTypes = {
     children: PropTypes.node
 }

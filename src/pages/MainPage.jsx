@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import Home from "../components/Home";
+import Navbar from "../components/Navbar";
 
 export default function MainPage() {
     return (
         <div>
             <div className="mt-20">
-                <Home></Home>
+                <Navbar></Navbar>
             </div>
             <Outlet></Outlet>
 
